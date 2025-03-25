@@ -8,7 +8,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/sirupsen/logrus"
 
@@ -169,14 +168,14 @@ func (s *Service) findTemplateFile(filename string) ([]byte, error) {
 // configureStrongSwan configures StrongSwan (IKEv2) VPN for iOS
 func (s *Service) configureStrongSwan(session *ssh.Session, serverIP, password string) (string, string, string, error) {
 	scriptContent, err := s.findTemplateFile("strongswan-setup.sh")
-	if (err != nil) {
+	if err != nil {
 		return "", "", "", fmt.Errorf("failed to read StrongSwan setup script: %w", err)
 	}
 
 	// Generate VPN credentials
 	vpnUsername := "vpnuser"
 	vpnPassword, err := s.GeneratePassword(16)
-	if (err != nil) {
+	if err != nil {
 		return "", "", "", fmt.Errorf("failed to generate VPN password: %w", err)
 	}
 
@@ -193,7 +192,7 @@ func (s *Service) configureStrongSwan(session *ssh.Session, serverIP, password s
 
 	// Execute StrongSwan setup script
 	stdout, stderr, err := session.ExecuteScript(script)
-	if (err != nil) {
+	if err != nil {
 		s.logger.WithError(err).WithFields(map[string]interface{}{
 			"stdout": stdout,
 			"stderr": stderr,
@@ -204,7 +203,7 @@ func (s *Service) configureStrongSwan(session *ssh.Session, serverIP, password s
 	// Check if mobileconfig file was generated and download it
 	mobileconfigPath := "/tmp/ios-vpn.mobileconfig"
 	configFileContent, err := session.DownloadFile(mobileconfigPath)
-	if (err != nil) {
+	if err != nil {
 		s.logger.WithError(err).Error("Failed to download iOS VPN configuration")
 		return "", "", "", fmt.Errorf("failed to download iOS VPN configuration: %w", err)
 	}
@@ -391,7 +390,7 @@ func (s *Service) GeneratePassword(length int) (string, error) {
 	result := make([]byte, length)
 	for i := 0; i < length; i++ {
 		randomIndex, err := rand.Int(rand.Reader, charsetLength)
-		if (err != nil) {
+		if err != nil {
 			return "", err
 		}
 		result[i] = charset[randomIndex.Int64()]
