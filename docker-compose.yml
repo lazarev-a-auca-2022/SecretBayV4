@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  secretbay:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: secretbay-server
+    restart: unless-stopped
+    ports:
+      - "8443:8443"
+    volumes:
+      - ./certs:/app/certs
+      - ./logs:/app/logs
+    environment:
+      - TZ=UTC
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=secretbay
+      - JWT_SECRET=change-this-to-a-secure-secret-key-in-production
+    healthcheck:
+      test: ["CMD", "wget", "--no-check-certificate", "--spider", "-q", "https://localhost:8443/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

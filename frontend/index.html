@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecretBay - VPN Configuration Tool</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SecretBay</h1>
+            <p class="tagline">Cross Platform VPN Configuration Tool</p>
+        </header>
+
+        <div id="login-section" class="section">
+            <h2>Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>
+
+        <div id="config-section" class="section hidden">
+            <h2>Configure VPN Server</h2>
+            <form id="config-form">
+                <div class="form-group">
+                    <label for="server-ip">Server IP Address</label>
+                    <input type="text" id="server-ip" name="server-ip" required>
+                </div>
+                <div class="form-group">
+                    <label for="server-username">Server Username</label>
+                    <input type="text" id="server-username" name="server-username" required value="root">
+                </div>
+                <div class="form-group">
+                    <label for="auth-method">Authentication Method</label>
+                    <select id="auth-method" name="auth-method" required>
+                        <option value="password">Password</option>
+                        <option value="key">SSH Key</option>
+                    </select>
+                </div>
+                <div class="form-group" id="password-group">
+                    <label for="server-password">Server Password</label>
+                    <input type="password" id="server-password" name="server-password">
+                </div>
+                <div class="form-group hidden" id="key-group">
+                    <label for="ssh-key">SSH Private Key</label>
+                    <textarea id="ssh-key" name="ssh-key" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="vpn-type">VPN Type</label>
+                    <select id="vpn-type" name="vpn-type" required>
+                        <option value="ios">iOS VPN (IKEv2/IPsec)</option>
+                        <option value="openvpn">OpenVPN</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Configure VPN</button>
+            </form>
+        </div>
+
+        <div id="progress-section" class="section hidden">
+            <h2>VPN Configuration Progress</h2>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <div id="progress-status">Initializing...</div>
+            </div>
+        </div>
+
+        <div id="result-section" class="section hidden">
+            <h2>VPN Configuration Complete</h2>
+            <div class="result-info">
+                <div class="alert alert-success">
+                    <strong>Success!</strong> Your VPN has been successfully configured.
+                </div>
+                <div id="connection-info" class="connection-info"></div>
+                <div class="download-container">
+                    <p>Download your VPN configuration file:</p>
+                    <a id="download-config" class="btn btn-primary" href="#">Download Configuration</a>
+                </div>
+                <div class="password-info">
+                    <p><strong>New Server Password:</strong> <span id="new-password"></span></p>
+                    <p class="warning">⚠️ Save this password! You will need it to access your server in the future.</p>
+                </div>
+                <button id="configure-new" class="btn btn-secondary">Configure Another VPN</button>
+            </div>
+        </div>
+
+        <div id="error-section" class="section hidden">
+            <h2>Error</h2>
+            <div class="alert alert-danger">
+                <strong>Error!</strong> <span id="error-message"></span>
+            </div>
+            <button id="try-again" class="btn btn-secondary">Try Again</button>
+        </div>
+
+        <footer>
+            <p>&copy; 2023 SecretBay - Secure VPN Configuration Tool</p>
+        </footer>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
